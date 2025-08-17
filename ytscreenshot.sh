@@ -57,6 +57,19 @@ if ! command_exists yt-dlp; then
     fi
 fi
 
+# Check for Python packages
+print_color "$YELLOW" "Checking Python packages..."
+python3 -c "import PIL, numpy" 2>/dev/null
+if [ $? -ne 0 ]; then
+    print_color "$YELLOW" "Installing required Python packages..."
+    pip3 install --user Pillow numpy
+    if [ $? -ne 0 ]; then
+        print_color "$RED" "Failed to install Python packages"
+        echo "Please install manually: pip3 install Pillow numpy"
+        exit 1
+    fi
+fi
+
 # Check for ffmpeg
 if ! command_exists ffmpeg; then
     print_color "$RED" "Error: ffmpeg is not installed"
